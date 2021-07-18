@@ -49,7 +49,7 @@ add propertaddress_city varchar(20)
 
 UPDATE Nashvillehouse
 SET propertaddress_address=SUBSTRING(propertyaddress,1,charindex(',',propertyAddress) -1),
-	propertaddress_city=SUBSTRING(propertyaddress,charindex(',',propertyAddress) +1,len(PropertyAddress))
+    propertaddress_city=SUBSTRING(propertyaddress,charindex(',',propertyAddress) +1,len(PropertyAddress))
 
 SELECT propertaddress_address, propertaddress_city from Nashvillehouse
 
@@ -59,8 +59,8 @@ SELECT propertaddress_address, propertaddress_city from Nashvillehouse
 SELECT owneraddress from Nashvillehouse
 
 SELECT PARSENAME(REPLACE(owneraddress,',','.'),1) as state,
-	   PARSENAME(REPLACE(owneraddress,',','.'),2) as city,
-	   PARSENAME(REPLACE(owneraddress,',','.'),3) as address
+       PARSENAME(REPLACE(owneraddress,',','.'),2) as city,
+       PARSENAME(REPLACE(owneraddress,',','.'),3) as address
 FROM Nashvillehouse
 
 
@@ -77,7 +77,7 @@ add owneraddress_address varchar(40)
 UPDATE Nashvillehouse
 set owneraddress_state=PARSENAME(REPLACE(owneraddress,',','.'),1),
     owneraddress_city=PARSENAME(REPLACE(owneraddress,',','.'),2),
-	owneraddress_address=PARSENAME(REPLACE(owneraddress,',','.'),3)
+    owneraddress_address=PARSENAME(REPLACE(owneraddress,',','.'),3)
 
 
 SELECT owneraddress, owneraddress_address, owneraddress_city, owneraddress_state from Nashvillehouse
@@ -89,10 +89,10 @@ select soldasvacant,count(soldasvacant) from nashvillehouse group by  SoldAsVaca
 
 UPDATE Nashvillehouse
 SET SoldAsVacant= case 
-				  When soldasvacant='Y' then 'Yes'
-				  when soldasvacant='N' then 'No'
-				  else soldasvacant
-				  end
+		 When soldasvacant='Y' then 'Yes'
+		 when soldasvacant='N' then 'No'
+		 else soldasvacant
+		 end
 
 select soldasvacant,count(soldasvacant) from nashvillehouse group by  SoldAsVacant
 
@@ -100,14 +100,14 @@ select soldasvacant,count(soldasvacant) from nashvillehouse group by  SoldAsVaca
 --Removing duplicates
 
 SELECT * FROM (SELECT *, row_number () over( partition by parcelId,propertyaddress,saledate,saleprice,legalreference
-							  order by uniqueID) row_num
+					     order by uniqueID) row_num
 FROM nashvillehouse) t  where t.row_num>1
 
 --TO DELETE THE ROWS ABOVE ::
 
 WITH r_num_cte AS(
 SELECT *, row_number () over( partition by parcelId,propertyaddress,saledate,saleprice,legalreference
-							  order by uniqueID) row_num
+			      order by uniqueID) row_num
 FROM nashvillehouse 
 )
 DELETE FROM r_num_cte where row_num>1
